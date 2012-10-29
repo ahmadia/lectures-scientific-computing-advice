@@ -9,7 +9,6 @@ of this lecture is to help orient you on the path to writing software as part of
 * making specific recommendations for 
     + selecting tools that you should be using 
     + and practices that you should be following
-
 * three themes I focus on are:
     + **reducing complexity**
     + **automating your workflow**
