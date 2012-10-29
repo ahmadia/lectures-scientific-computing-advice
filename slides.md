@@ -68,7 +68,7 @@ Chebfun teaser from the [website](http://www2.maths.ox.ac.uk/chebfun/)
 [Dolfin Example 7](http://fenicsproject.org/documentation/dolfin/1.0.0/python/demo/pde/poisson/python/documentation.html), part of the [FEniCS project](http://fenicsproject.org/)
 
 ```{.python}
-from dolphin import *
+from dolfin import *
 # Create mesh and define function space
 mesh = UnitSquare(32, 32)
 V = FunctionSpace(mesh, "Lagrange", 1)
@@ -148,7 +148,7 @@ LISP
 
 ## Understand the limitations of floating-point numbers, learn symbolic tools as well
 * As a computational scientist, you will likely be working with numerical systems solved using floating point numbers
-    + *pay attention when Prof. Macdonald covers them later this term!*
+    + *pay attention when Dr. Macdonald covers them later this term!*
     + The excellent article *What Every Computer Scientist Should Know About Floating-Point Arithmetic* is a great way to do some advance reading
 
 * Don't limit yourself to numerical computations, use symbolic tools such as SAGE, SymPy and Mathematica as well when they make sense
