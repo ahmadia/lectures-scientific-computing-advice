@@ -1,9 +1,8 @@
-% Scientific Computing  
-  Mathematical Institute, University of Oxford
-% Guest Lecturer: Aron Ahmadia  
-  <aron@ahmadia.net>  
-  <http://aron.ahmadia.net>
-% 26 October, 2012
+% Software Carpentry in High Performance Computing  
+  ATPESC 2014
+% Aron Ahmadia and Christopher Kees
+  US Army Engineer Research and Development Center
+% 14 August, 2014
 
 ## Copy This Lecture!
 <br></br>
@@ -12,148 +11,98 @@
 <br></br>
 <br></br>
 <br></br>
-<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Fundaments of Computational Software Engineering</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://aron.ahmadia.net" property="cc:attributionName" rel="cc:attributionURL">Aron Ahmadia</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 Unported License</a>.
+<a rel="license"
+href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img
+alt="Creative Commons License" style="border-width:0"
+src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br
+/><span xmlns:dct="http://purl.org/dc/terms/"
+href="http://purl.org/dc/dcmitype/InteractiveResource"
+property="dct:title" rel="dct:type">Fundaments of Computational
+Software Engineering</span> by <a
+xmlns:cc="http://creativecommons.org/ns#"
+href="http://aron.ahmadia.net" property="cc:attributionName"
+rel="cc:attributionURL">Aron Ahmadia and Christopher Kees</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 Unported License</a>.
 
 ## Introduction
 
-There are a plethora of techniques, tools, languages, and platforms available to help you scientifically compute. It is likely that you will only be able to afford a limited amount of time learning a subset of them. The purpose of this lecture is to help orient you on the path to writing software as part of your research by: 
+There are a plethora of best practices
+available to help you compute on HPC systems.
+It is likely that you will only be able to afford a limited amount of
+time learning a subset of them.
+The purpose of this lecture is to help orient you on the path to writing software as part of your research by: 
 
 >
-* introducing the important tools and paradigms of software construction
-* relating them to your role as a scientist, and
+* introducing the most important practices of software construction
+    + and relating them to your role as a scientist
 * making specific recommendations for 
     + selecting tools that you should be using 
     + and practices that you should be following
 
->
-* three themes I will focus on are:
-    + **reducing complexity**
-    + **automating your workflow**
-    + **encouraging experimentation**
-
-Keywords in **bold** are important concepts, notes in *italics* are my own personal advocacy.
-
-# Understand the Languages of Computing 
-
-## Be fluent in multiple languages
-You speak multiple languages when interacting with a computer.  Choosing to use a new tool, library, or language can be similar to learning a new language:
+## The 8 Essential Practices
 
 >
-+ There is a high initial startup cost as you learn vocabulary, grammar, and idioms  
-<font color=blue>`sum(x*y for x,y in itertools.izip(x_vector, y_vector))`</font color>
-+ You will learn faster by observing and working with others who are more skilled than you
-+ But once you have gained some fluency, you will find yourself capable of new things!
+1. Write Programs for People, Not Computers
+2. Let the Computer Do the Work
+3. Make Incremental Changes
+4. Don't Repeat Yourself (or Others)
+5. Plan for Mistakes
+6. Design Flexibly for Performance, Build Accessibly for Correctness
+7. Document Design and Purpose, Not Mechanics
+8. Collaborate
 
-## Use domain specific languages and libraries to increase your expressivity 
 
-* Aim for languages and tools that allow you to express your models simply, whether that is symbolically, numerically, or like [`chebfun`](http://www2.maths.ox.ac.uk/chebfun/), a strange union of the two. 
+# 1. Write Programs For People, Not Computers
 
-## Motivating Example: Chebfun
+## 1. Write Programs For People, Not Computers
 
-Chebfun teaser from the [website](http://www2.maths.ox.ac.uk/chebfun/)
+>
+* **[a]** A program should not require its readers to hold more than a handful of facts in memory at once.
+* **[b]** Make names consistent, distinctive, and meaningful.
+* **[c]** Make code style and formatting consistent.
 
-```{.matlab}
-% What's the integral of sin(sin(x)) from 0 to 10?
->> x = chebfun('x',[0 10]); sum(sin(sin(x)))
 
-% What's the maximum of sin(x)+sin(x2) over the same interval?
->> x = chebfun('x',[0 10]); sum(sin(sin(x)))
+# 2. Let the Computer Do the Work
 
-% What's the solution to u"-xu=1 with zero boundary conditions on [-20,20]? 
->> L = chebop(@(x,u)diff(u,2)-x.*u,[-20,20],'dirichlet'); plot(L\1)
-```
+## 2. Let the Computer Do the Work
 
-## Motivating Example: FEniCS solving Poisson
+>
+*  **[a]** Make the computer repeat tasks.
+*  **[b]** Save recent commands in a file for re-use.
+*  **[c]** Use a build tool to automate workflows.  *More on this later*
 
-[Dolfin Example 7](http://fenicsproject.org/documentation/dolfin/1.0.0/python/demo/pde/poisson/python/documentation.html), part of the [FEniCS project](http://fenicsproject.org/)
+# 3. Make Incremental Changes.
 
-```{.python}
-from dolfin import *
-# Create mesh and define function space
-mesh = UnitSquare(32, 32)
-V = FunctionSpace(mesh, "Lagrange", 1)
+## 3. Make Incremental Changes.
 
-# Define Dirichlet boundary (x = 0 or x = 1)
-def boundary(x):
-    return x[0] < DOLFIN_EPS or x[0] > 1.0 - DOLFIN_EPS
+>
+*  **[a]** Work in small steps with frequent feedback and course correction.
+*  **[b]** Use a version control system.
+*  **[c]** Put everything that has been created manually in version control.
 
-# Define boundary condition
-u0 = Constant(0.0)
-bc = DirichletBC(V, u0, boundary)
+## Organize with Wikis
 
-# Define variational problem
-u = TrialFunction(V)
-v = TestFunction(V)
-f = Expression("10*exp(-(pow(x[0] - 0.5, 2) + 
-    pow(x[1] - 0.5, 2)) / 0.02)")
-g = Expression("sin(5*x[0])")
-a = inner(grad(u), grad(v))*dx
-L = f*v*dx + g*v*ds
+>
+*  **[a]** organize your personal notes into a personal wiki (gollum, gitit, instiki)
+*  **[b]** organize your shared notes into a group wiki (gollum, gitit, instiki)
 
-# Compute solution
-u = Function(V)
-solve(a == L, u, bc)
-```
+## Use Version Control for Checkpointing and Collaboration
 
-## Self-Promoting Example: PyClaw solving Acoustics 
+>
+* use local version control software to checkpoint personal code development
+  + checkpointing your work encourages wild ideas and late-night coding sessions
+  + you can easily restore back in the morning if it was a bad idea
+* use **distributed version control** to collaborate with others
+* I advocate *Git*, but you may be stuck with whatever your group uses
+  + though check out git-svn for using Git to collaborate with an svn repository, it's awesome!
 
-[PyClaw example](http://numerics.kaust.edu.sa/pyclaw/tutorial.html) from [the paper submitted to the SIAM Journal of Scientific Computing](http://numerics.kaust.edu.sa/papers/pyclaw-sisc/pyclaw-sisc.html).
+# 4. Don't Repeat Yourself (or Others)
 
-```{.python}
+## 4. Don't Repeat Yourself (or Others)
 
-from clawpack import pyclaw
-from clawpack import riemann
-
-# Define the equations and the solution algorithm
-solver = pyclaw.ClawSolver2D(riemann.rp2_euler_4wave)
-
-# Define the problem domain
-domain = pyclaw.Domain([0.,0.],[1.,1.],[100,100])
-solver.all_bcs = pyclaw.BC.extrap
-solution = pyclaw.Solution(solver.num_eqn,domain)
-
-# Set physical parameters
-gamma = 1.4
-solution.problem_data['gamma']  = gamma
-
-# Set initial data
-xx,yy = domain.grid.p_centers
-l = xx<0.5; r = xx>=0.5; b = yy<0.5; t = yy>=0.5
-solution.q[0,...] = 2.*l*t + 1.*l*b + 1.*r*t + 3.*r*b
-solution.q[1,...] = 0.75*t - 0.75*b
-solution.q[2,...] = 0.5*l  - 0.5*r
-solution.q[3,...] = 0.5*solution.q[0,...]* \
-                    (solution.q[1,...]**2+solution.q[2,...]**2) \
-                    + 1./(gamma-1.)
-
-# Solve
-solver.evolve_to_time(solution,tend=0.3)            
-
-# Plot
-pyclaw.plot.interactive_plot()
-```
-
-## Use REPL Environments for Development
-
-**REPL (read-eval-print-loop)** environments tighten the coupling between the code you write and the results you see, increasing productivity.
-
-REPL                                        non-REPL
--------------------          -----------------------
-Visual Basic                 Supercomputers     
-Command Line                 C
-IPython and Python           C++
-MATLAB                       Java
-Mathematica                  Fortran
-LISP
-
-## Understand the limitations of floating-point numbers, learn symbolic tools as well
-* As a computational scientist, you will likely be working with numerical systems solved using floating point numbers
-    + *pay attention when Dr. Macdonald covers them later this term!*
-    + The excellent article *What Every Computer Scientist Should Know About Floating-Point Arithmetic* is a great way to do some advance reading
-
-* Don't limit yourself to numerical computations, use symbolic tools such as SAGE, SymPy and Mathematica as well when they make sense
-
-# Don't Repeat Yourself (or Others)
+>
+*  **[a]** Every piece of data must have a single authoritative representation in the system.
+*  **[b]** Modularize code rather than copying and pasting.
+*  **[c]** Re-use code instead of rewriting it.
 
 ## Automate common actions by saving simple blocks of code into **scripts**
 
@@ -172,6 +121,7 @@ LISP
 * **Don't repeat code in scripts, refactor them to functions**
 
 ## Group commonly used functions into **libraries**
+
 >
 * If you are unlucky enough to have to write a lot of software functions for your work, you might want to consider designing and releasing a library so that others do not have to share your misfortune
 * You might want to first check that nobody else has implemented the functionality you need
@@ -179,14 +129,92 @@ LISP
 * *Openly licensed non-commercial libraries tend to have a much longer effective lifespan than unreleased codes*
 * **Share your code with others, and use their code**
 
-## Design languages around commonly used paradigms
+# 5. Plan for Mistakes
+
+## 5. Plan for Mistakes
 
 >
-* I am not Guido van Rossum or Cleve Moler, but you could be!
+*  **[a]** Add assertions to programs to check their operation.
+*  **[b]** Use an off-the-shelf unit testing library.
+*  **[c]** Turn bugs into test cases.
+* **[d]** Use a symbolic debugger.
 
-# Reduce Complexity
+## Verify and Validate your Code
 
-## Basic strategies
+>
+* **verification** - is your code correctly written?
+* **validation** - do your computations accurately model the physical phenomena in question?
+* test frameworks help you verify your code, but validation is usually a manual process
+ + although it is desirable to write regression tests that verify previously validated results hold true when the code has been modified!
+* use the **method of manufactured solutions** to verify correctness of code
+* use **comparisons to experiment** to validate code
+* use **comparisons to similar software** as an additional check
+
+# 6. Document design and purpose, not mechanics.
+
+## 6. Document design and purpose, not mechanics.
+
+>
+*  **[a]** Document interfaces and reasons, not implementations.
+*  **[b]** Refactor code in preference to explaining how it works.
+*  **[c]** Embed the documentation for a piece of software in that software.
+
+## Principles of documentation
+
+>
+* Save every bit of code you use for generating publishable results
+* Document and comment your code for yourself as if you will need to understand it in 6 months
+  + use README files liberally
+  + as well as file-level, function-level, and inline documentation
+* If any piece of code is too complex to easily describe, consider refactoring it
+
+# 7. Design flexibly for performance, build accessibly for correctness
+
+## 7. Design flexibly for performance, build accessibly for correctness
+
+>
+*  **[a]** Better algorithms beat better architectures
+*  **[b]** Write code in the highest-level language possible.
+*  **[c]** Use a profiler to identify bottlenecks.
+
+## Be fluent in multiple languages
+You speak multiple languages when interacting with a computer.  Choosing to use a new tool, library, or language can be similar to learning a new language:
+
+>
++ There is a high initial startup cost as you learn vocabulary, grammar, and idioms  
+<font color=blue>`sum(x*y for x,y in itertools.izip(x_vector, y_vector))`</font color>
++ You will learn faster by observing and working with others who are more skilled than you
++ But once you have gained some fluency, you will find yourself capable of new things!
+
+## Use domain specific languages and libraries to increase your expressivity
+
+* Aim for languages and tools that allow you to express your models simply.
+* Minimize the coupling to external libraries so it is easier to upgrade, replace, or remove them.
+
+## Use REPL Environments for Development
+
+**REPL (read-eval-print-loop)** environments tighten the coupling between the code you write and the results you see, increasing productivity.
+
+|REPL                          |              non-REPL |
+:----------------|:----------------------|
+| IPython and Python    |                   C/C++ |
+| Julia                            |                  Fortran  |
+| Interactive Sessions   |                      Batch Systems |
+
+
+# Collaborate
+
+## Collaborate
+
+>
+* Use pre-merge code reviews.
+* Use pair programming when bringing someone new up to speed and when
+tackling particularly tricky problems.
+* Use an issue tracking tool.
+
+# Closing Thoughts 
+
+## Reduce Complexity
 
 >
 * Endeavor to use languages and libraries that reduce the complexity of your work
@@ -197,58 +225,11 @@ LISP
     + your code will be easier to understand and maintain
 * When writing software, try to keep individual functions short, single-purpose, and avoid excessive nesting
 
-# Organize, Checkpoint, and Collaborate
-
-## Back up your data!
-
-## Organize with wikis
-
-* organize your personal notes into a personal wiki (gollum, gitit, instiki)
-* organize your shared notes into a group wiki (gollum, gitit, instiki)
-* *improve the layperson's understanding of your field by editing Wikipedia*
-
-## Use version Control for checkpointing and collaboration
-
-* use local version control software to checkpoint personal code development
-  + checkpointing your work encourages wild ideas and late-night coding sessions
-  + you can easily restore back in the morning if it was a bad idea
-* use **distributed version control** to collaborate with others
-* I advocate *git*, but you may be stuck with whatever your group uses
-  + though check out git-svn for using git to collaborate with an svn repository, it's awesome!
-
-# Verify and Validate your Code
-
-## Principles of verification and validation
-* **verification** - is your code correctly written?
-* **validation** - do your computations accurately model the physical phenomena in question?
-* test frameworks help you verify your code, but validation is usually a manual process
- + although it is desirable to write regression tests that verify previously validated results hold true when the code has been modified!
-* use the **method of manufactured solutions** to verify correctness of code
-* use **comparisons to experiment** to validate code
-* use **comparisons to similar software** as an additional check
-
-# Document your Computational Work
-
-## Principles of documentation
-* Save every bit of code you use for generating publishable results
-* Document and comment your code for yourself as if you will need to understand it in 6 months
-  + use README files liberally
-  + as well as file-level, function-level, and inline documentation
-* If any piece of code is too complex to easily describe, consider refactoring it
-
-# Closing Thoughts 
-
 ## Aim for reproducibility
 * The goals of non-review scientific publications are to:
     + Describe a new result or approach
     + Convince others of its usefulness
 * The **reproducibility** of your publication will greatly benefit both of these goals
-* An important new tool in this domain is <http://RunMyCode.org>, which allows other scientists to reproduce your computational results on the cloud
-* See also <http://figshare.com> for an easy way to store and share your data in an easily-cited way
-
-## Questions for the lecturer
-* Why do senior computational scientists recommend against using libraries?
-* How do I evaluate the usefulness of other people's code?
 
 # References and Further Reading
 
@@ -296,7 +277,7 @@ D. A. Aruliah, C. Titus Brown, Neil P. Chue Hong, Matt Davis, Richard T. Guy, St
 
 Preprint: http://arxiv.org/abs/1210.0530
 
-*Good summary paper of many fundamental practices for working with and developing scientific software. This is a preprint, so expect some rough spots.*
+*Good summary paper of many fundamental practices for working with and developing scientific software.*
 
 # Web References
 
@@ -320,8 +301,9 @@ http://sciencecodemanifesto.org
 
 *Publicly signed commitment to clear licensing and curation of software associated with research publications.*
 
-## RunMyCode.org
+## US Army Engineer Research and Development Center
 
-http://runmycode.org
+http://www.erdc.usace.army.mil/
 
-*Simplifies the process of scientific software dissemination for authors. Possibly the greatest website on the planet.  Possibly also Dr. Ahmadia's employer*.
+*Innovative solutions for a safer world.*
+
