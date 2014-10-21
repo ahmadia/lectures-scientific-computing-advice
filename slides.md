@@ -1,8 +1,7 @@
-% Software Carpentry in High Performance Computing  
-  ATPESC 2014
-% Aron Ahmadia and Christopher Kees
+% Software Carpentry in Computational Science
+% Aron Ahmadia
   US Army Engineer Research and Development Center
-% 14 August, 2014
+% 21 October, 2014
 
 ## Copy This Lecture!
 <br></br>
@@ -17,23 +16,23 @@ alt="Creative Commons License" style="border-width:0"
 src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br
 /><span xmlns:dct="http://purl.org/dc/terms/"
 href="http://purl.org/dc/dcmitype/InteractiveResource"
-property="dct:title" rel="dct:type">Fundaments of Computational
-Software Engineering</span> by <a
+property="dct:title" rel="dct:type">Software Carpentry in
+Computational Science</span> by <a
 xmlns:cc="http://creativecommons.org/ns#"
 href="http://aron.ahmadia.net" property="cc:attributionName"
-rel="cc:attributionURL">Aron Ahmadia and Christopher Kees</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 Unported License</a>.
+rel="cc:attributionURL">Aron Ahmadia</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 Unported License</a>.
 
 ## Introduction
 
 There are a plethora of best practices
-available to help you compute on HPC systems.
+available to help you scientifically compute.
 It is likely that you will only be able to afford a limited amount of
 time learning a subset of them.
 The purpose of this lecture is to help orient you on the path to writing software as part of your research by: 
 
 >
 * introducing the most important practices of software construction
-    + and relating them to your role as a scientist
+    + and relating them to your role as a mathematician
 * making specific recommendations for 
     + selecting tools that you should be using 
     + and practices that you should be following
@@ -68,7 +67,7 @@ The purpose of this lecture is to help orient you on the path to writing softwar
 >
 *  **[a]** Make the computer repeat tasks.
 *  **[b]** Save recent commands in a file for re-use.
-*  **[c]** Use a build tool to automate workflows.  *More on this later*
+*  **[c]** Use a build tool to automate workflows.  
 
 # 3. Make Incremental Changes.
 
